@@ -1,10 +1,18 @@
 package com.byaj.lesson401;
 
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
+
+import java.security.Principal;
 
 @Controller
 public class HomeController {
+
+  @Autowired
+  UserRepository userRepository;
+
   @RequestMapping("/")
   public String index(){
     return "index";
@@ -14,7 +22,11 @@ public class HomeController {
           return "login";
   }
   @RequestMapping("/secure")
-  public String secure(){
+  public String secure(Principal principal, Model model)
+  {
+    String username = principal.getName();
+    model.addAttribute("user", userRepository.findByUsername(username));
+
     return "admin";
   }
 }
